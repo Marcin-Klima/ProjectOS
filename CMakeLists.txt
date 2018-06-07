@@ -7,9 +7,9 @@ message(STATUS "The host processor is ${CMAKE_HOST_SYSTEM_PROCESSOR}")
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 	message(STATUS "Compiling using Clang (LLVM) compiler")
-	set(CMAKE_CXX_FLAGS "-Wall -Werror -std=c++17")
+	set(CMAKE_CXX_FLAGS "-Wall -std=c++17")
 	set(CMAKE_CXX_FLAGS_RELEASE "-O2")
-	set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
+	set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -fstandalone-debug")
 endif()
 
 message(STATUS "Compiling for ${CMAKE_SYSTEM_NAME} system")

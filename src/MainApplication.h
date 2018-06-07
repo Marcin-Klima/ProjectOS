@@ -6,6 +6,8 @@
 
 
 #include "Screen.h"
+#include "Granary.h"
+#include "Worker.h"
 
 class MainApplication
 {
@@ -15,11 +17,16 @@ public:
 
 	void Start();
 	void WaitForUserInput();
+	void Stop();
 
 private:
 	bool running;
-	Screen screen;
 	std::thread * userInputThread;
+
+	Screen screen;
+	Granary granary;
+
+	std::vector<Worker> workers;
 
 	void UserInput();
 };

@@ -7,6 +7,8 @@ int main()
 	application.Start();
 
 
+
 	application.WaitForUserInput();
+	application.Stop();
 	return 0;
 }

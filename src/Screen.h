@@ -5,21 +5,34 @@
 #pragma once
 
 #include <thread>
+#include <vector>
+#include "Drawable.h"
+#include "Worker.h"
+#include "Granary.h"
 
 class Screen
 {
 public:
 	Screen();
-	void Initialize();
-	void Display();
-	void Close();
 	~Screen();
+
+	void StartRunning();
+	void Close();
+	void AddDrawable(Drawable &drawable);
+	void SetWorkersVector(std::vector<Worker> *workers);
+	void SetGranary(Granary * granary);
 
 private:
 	std::thread * screenThread;
-	unsigned int XSize, YSize;
-	void Loop();
+	unsigned int ScreenXSize, ScreenYSize;
 	bool running;
+
+	void Loop();
+	void DrawWorkers();
+	void DrawGranary();
+	std::vector<Drawable *> drawables;
+	std::vector<Worker> * workers;
+	Granary * granary;
 };
 
 
