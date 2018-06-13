@@ -4,10 +4,8 @@
 
 #pragma once
 
-
 #include "Screen.h"
-#include "Granary.h"
-#include "Worker.h"
+
 
 class MainApplication
 {
@@ -25,8 +23,12 @@ private:
 
 	Screen screen;
 	Granary granary;
+	Plantation plantation;
+	Queen queen;
+	King king;
 
 	std::vector<Worker> workers;
 
 	void UserInput();
+	void MainThread();
 };

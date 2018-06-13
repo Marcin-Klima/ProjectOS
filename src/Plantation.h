@@ -7,16 +7,27 @@
 
 #include "Drawable.h"
 #include <string>
+#include <thread>
+#include <mutex>
 
 class Plantation : public Drawable
 {
 public:
+	Plantation();
 	virtual const std::string * GetASCIIModel() { return ASCIIModel; }
 	static std::string ASCIIModel[];
-	virtual ~Plantation();
+	~Plantation();
+	void StartSimulation();
+	void StopSimulation();
+	unsigned int GetWorkersOnPlantation() { return workersOnPlantation; }
+	bool ReserveSpaceOnPlantation(unsigned int xPos, unsigned int yPos);
+	void FreeSpaceOnPlantation(unsigned int  xPos, unsigned int yPos);
 
 private:
-	const unsigned int width = 5;
-	const unsigned int height = 5;
-	bool occupationArray[5][5] = {false};
+	std::mutex mutex;
+	volatile bool working;
+	std::thread * natureThread;
+	bool occupationArray[5][5];
+	unsigned int workersOnPlantation;
+	void Simulate();
 };

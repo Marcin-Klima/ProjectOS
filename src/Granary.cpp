@@ -15,9 +15,34 @@ const std::string Granary::ASCIIModel[] = {     "   /\\",
 Granary::Granary()
 {
 	modelHeight = 7;
+	currentCapacity = 0;
 }
 
 Granary::~Granary()
 {
 
 }
+
+bool Granary::PutFood(unsigned int foodVolume)
+{
+	mutex.lock();
+
+	if(currentCapacity + foodVolume < maxCapacity)
+	{
+		currentCapacity += foodVolume;
+		mutex.unlock();
+		return true;
+	}
+	else
+	{
+		mutex.unlock();
+		return false;
+	}
+}
+
+void Granary::TakeFood(unsigned int count)
+{
+	currentCapacity -= count;
+
+}
+

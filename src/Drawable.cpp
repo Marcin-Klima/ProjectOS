@@ -4,16 +4,8 @@
 
 #include "Drawable.h"
 
-Drawable::Drawable()
+Drawable::Drawable() : modelHeight(0)
 {
-	xPosition = 0;
-	yPosition = 0;
-}
-
-void Drawable::SetPosition(unsigned int xPos, unsigned int yPos)
-{
-	xPosition = xPos;
-	yPosition = yPos;
 }
 
 Drawable::~Drawable()
