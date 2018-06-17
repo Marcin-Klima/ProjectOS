@@ -4,6 +4,7 @@
 
 #include <random>
 #include "Queen.h"
+#include "GlobalMutexes.h"
 
 std::string Queen::ASCIIModel[] = { "QUEEN" };
 
@@ -46,16 +47,19 @@ void Queen::Simulation()
 			std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		}while(timePassed <= timeInterval && working == true);
 
+		GlobalMutexes::mutex_workersVector.lock();
 		while(workers->size() >= maxWorkers && working == true)
 		{
+			GlobalMutexes::mutex_workersVector.unlock();
 			std::this_thread::sleep_for(std::chrono::milliseconds(50));
+			GlobalMutexes::mutex_workersVector.lock();
 		}
-
 		workers->push_back(Worker());
 		workers->at(workers->size() - 1).SetGranary(granary);
 		workers->at(workers->size() - 1).SetPlanatation(plantation);
 		workers->at(workers->size() - 1).SetKing(king);
 		workers->at(workers->size() - 1).StartWorking();
+		GlobalMutexes::mutex_workersVector.unlock();
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(timeBetweenNewWorkers));
 	}while(working == true);

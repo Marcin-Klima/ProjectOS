@@ -21,7 +21,7 @@ public:
 
 private:
 	Granary *granary;
-	std::mutex mutex;
+	std::mutex kingMutex;
 	unsigned int workersInQueue;
 };
 

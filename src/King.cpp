@@ -16,7 +16,7 @@ King::King()
 void King::FeedWorkers()
 {
 	++workersInQueue;
-	mutex.lock();
+	kingMutex.lock();
 	{
 		while(granary->GetCurrentCapacity() < 10)
 		{
@@ -25,12 +25,13 @@ void King::FeedWorkers()
 		granary->TakeFood(10);
 		//std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	}
-	mutex.unlock();
+	kingMutex.unlock();
 	--workersInQueue;
 }
 
 void King::SetGranary(Granary *granary)
 {
+	kingMutex.lock();
 	this->granary = granary;
-
+	kingMutex.unlock();
 }

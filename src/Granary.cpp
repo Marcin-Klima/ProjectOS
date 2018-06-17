@@ -42,7 +42,8 @@ bool Granary::PutFood(unsigned int foodVolume)
 
 void Granary::TakeFood(unsigned int count)
 {
+	mutex.lock();
 	currentCapacity -= count;
-
+	mutex.unlock();
 }
 

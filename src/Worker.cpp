@@ -5,7 +5,6 @@
 #include <random>
 #include <algorithm>
 #include "Worker.h"
-#include "SyncRandomGenerator.h"
 
 const std::string Worker::ASCIIModel[] = {  " o ",
 									        "/|\\",

@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "MainApplication.h"
+#include "GlobalMutexes.h"
 
 MainApplication::MainApplication() : running(false), screen(), userInputThread(nullptr)
 {
@@ -33,23 +34,21 @@ void MainApplication::Start()
 	running = true;
 	screen.StartRunning();
 	queen.StartSimulation();
-	for(int i = 0; i < workers.size(); ++i)
-	{
-		workers[i].StartWorking();
-	}
 	plantation.StartSimulation();
+
+	GlobalMutexes::mutex_workersVector.lock();
 	for(int i = 0; i < 10; ++i)
 	{
 		workers.push_back(Worker());
 		workers[i].SetPlanatation(&plantation);
 		workers[i].SetGranary(&granary);
 		workers[i].SetKing(&king);
-//		std::this_thread::sleep_for(std::chrono::milliseconds(300));
 	}
 	for(int i = 0; i < workers.size(); ++i)
 	{
 		workers[i].StartWorking();
 	}
+	GlobalMutexes::mutex_workersVector.unlock();
 }
 
 MainApplication::~MainApplication()
@@ -88,5 +87,8 @@ void MainApplication::Stop()
 	plantation.StopSimulation();
 
 	screen.Close();
+
+	GlobalMutexes::mutex_workersVector.lock();
 	workers.clear();
+	GlobalMutexes::mutex_workersVector.unlock();
 }

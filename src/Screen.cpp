@@ -5,6 +5,7 @@
 #include <ncurses.h>
 #include "Screen.h"
 #include "Granary.h"
+#include "GlobalMutexes.h"
 
 Screen::Screen() : screenThread(nullptr), working(false), workers(nullptr),
                    granary(nullptr), plantation(nullptr)
@@ -34,7 +35,9 @@ void Screen::Loop()
 
 		std::string activerWorkers = "Active Workers: ";
 		activerWorkers.erase(16);
+		GlobalMutexes::mutex_workersVector.lock();
 		activerWorkers += std::to_string(workers->size());
+		GlobalMutexes::mutex_workersVector.unlock();
 		mvprintw(0, ScreenXSize / 2 - activerWorkers.length() / 2, activerWorkers.c_str());
 		DrawPlantation();
 		DrawGranary();
@@ -70,6 +73,8 @@ void Screen::DrawWorkers()
 
 	unsigned int currentXPos = workersFrameXPos;
 	unsigned int currentYPos = workersFrameYPos;
+
+	GlobalMutexes::mutex_workersVector.lock();
 	for(int i = 0; i < workers->size(); ++i)
 	{
 		mvprintw(currentYPos - 2, currentXPos, "Hunger: ");
@@ -95,6 +100,7 @@ void Screen::DrawWorkers()
 		}
 		currentYPos -= 3;
 	}
+	GlobalMutexes::mutex_workersVector.unlock();
 }
 
 
@@ -137,6 +143,7 @@ void Screen::DrawPlantation()
 
 void Screen::DeleteDeadWorkers()
 {
+	GlobalMutexes::mutex_workersVector.lock();
 	for(unsigned int i = 0; i < workers->size(); ++i)
 	{
 		if(workers->at(i).isAlive == false)
@@ -152,6 +159,8 @@ void Screen::DeleteDeadWorkers()
 		}
 		workers->erase(workers->begin() + deadWorkers[i]);
 	}
+	GlobalMutexes::mutex_workersVector.unlock();
+
 	deadWorkers.clear();
 }
 
